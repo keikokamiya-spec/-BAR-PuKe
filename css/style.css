@@ -129,7 +129,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ============================================================
-   Floating fruits
+   Floating petals
    ============================================================ */
 .floats-container {
   position: fixed;
@@ -141,17 +141,17 @@ a { color: inherit; text-decoration: none; }
 
 .float-particle {
   position: absolute;
-  bottom: -30px;
-  border-radius: 50%;
+  bottom: -40px;
   opacity: 0;
-  animation: floatUp var(--dur, 8s) var(--delay, 0s) ease-in infinite;
+  animation: floatUp var(--dur, 10s) var(--delay, 0s) ease-in infinite;
 }
 
 @keyframes floatUp {
-  0%   { transform: translateY(0)   rotate(0deg);   opacity: 0; }
-  10%  { opacity: 0.55; }
-  90%  { opacity: 0.3; }
-  100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  0%   { transform: translateY(0)      rotate(0deg)   translateX(0);      opacity: 0; }
+  8%   { opacity: 0.6; }
+  40%  { transform: translateY(-40vh)  rotate(120deg) translateX(18px); }
+  70%  { transform: translateY(-75vh)  rotate(260deg) translateX(-14px);  opacity: 0.4; }
+  100% { transform: translateY(-112vh) rotate(400deg) translateX(10px);   opacity: 0; }
 }
 
 /* Decorative blobs (section corners) */

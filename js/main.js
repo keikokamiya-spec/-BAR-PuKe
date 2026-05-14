@@ -83,16 +83,34 @@ document.querySelectorAll('.js-drawer-link').forEach(link => {
 });
 
 /* ============================================================
-   Floating fruit particles
+   Floating petals
    ============================================================ */
-const COLORS = ['#C94A3F', '#5BB8D4', '#F4833A', '#6DB84B', '#c77dff'];
+const PETAL_SETS = [
+  { p1: '#C94A3F', p2: '#d4736a', center: '#fde8e6' },
+  { p1: '#5BB8D4', p2: '#87cce0', center: '#e6f6fb' },
+  { p1: '#F4833A', p2: '#f7a673', center: '#fef0e6' },
+  { p1: '#6DB84B', p2: '#95cc7a', center: '#edf7e8' },
+];
+
+function makePetalSVG(set, size) {
+  const rx = size * 0.28;
+  const ry = size * 0.46;
+  const cx = size / 2;
+  const cr = size * 0.18;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="${cx}" cy="${cx * 0.42}" rx="${rx}" ry="${ry}" fill="${set.p1}" opacity="0.75" transform="rotate(0 ${cx} ${cx})"/>
+    <ellipse cx="${cx}" cy="${cx * 0.42}" rx="${rx}" ry="${ry}" fill="${set.p2}" opacity="0.65" transform="rotate(90 ${cx} ${cx})"/>
+    <ellipse cx="${cx}" cy="${cx * 0.42}" rx="${rx}" ry="${ry}" fill="${set.p1}" opacity="0.75" transform="rotate(180 ${cx} ${cx})"/>
+    <ellipse cx="${cx}" cy="${cx * 0.42}" rx="${rx}" ry="${ry}" fill="${set.p2}" opacity="0.65" transform="rotate(270 ${cx} ${cx})"/>
+    <circle cx="${cx}" cy="${cx}" r="${cr}" fill="${set.center}"/>
+  </svg>`;
+}
 
 function startFloatingParticles() {
   const container = document.getElementById('js-floats');
   if (!container) return;
-
   for (let i = 0; i < 18; i++) {
-    spawnParticle(container, i * 600);
+    spawnParticle(container, i * 500);
   }
 }
 
@@ -100,33 +118,23 @@ function spawnParticle(container, initialDelay) {
   const el = document.createElement('div');
   el.classList.add('float-particle');
 
-  const size  = Math.random() * 10 + 6;   // 6–16px
-  const left  = Math.random() * 96 + 2;   // 2–98 %
-  const dur   = Math.random() * 8  + 7;   // 7–15s
-  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const size = Math.floor(Math.random() * 14 + 16);  // 16–30px
+  const left = Math.random() * 94 + 3;
+  const dur  = (Math.random() * 7 + 9).toFixed(1);
+  const set  = PETAL_SETS[Math.floor(Math.random() * PETAL_SETS.length)];
 
-  el.style.cssText = `
-    width: ${size}px;
-    height: ${size}px;
-    left: ${left}%;
-    background: ${color};
-    --dur: ${dur}s;
-    --delay: ${(Math.random() * 4).toFixed(2)}s;
-    opacity: 0;
-  `;
+  el.style.cssText = `left:${left}%;--dur:${dur}s;--delay:${(Math.random()*5).toFixed(1)}s;`;
+  el.innerHTML = makePetalSVG(set, size);
 
   container.appendChild(el);
 
   setTimeout(() => {
     el.style.animationName = 'floatUp';
-
-    // Re-spawn after each cycle
     el.addEventListener('animationiteration', () => {
-      el.style.left = `${Math.random() * 96 + 2}%`;
-      const newSize = Math.random() * 10 + 6;
-      el.style.width  = `${newSize}px`;
-      el.style.height = `${newSize}px`;
-      el.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
+      el.style.left = `${Math.random() * 94 + 3}%`;
+      const newSize = Math.floor(Math.random() * 14 + 16);
+      const newSet  = PETAL_SETS[Math.floor(Math.random() * PETAL_SETS.length)];
+      el.innerHTML  = makePetalSVG(newSet, newSize);
     });
   }, initialDelay);
 }
